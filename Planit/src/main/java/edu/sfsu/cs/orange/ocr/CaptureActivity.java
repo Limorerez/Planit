@@ -17,9 +17,6 @@
 
 package edu.sfsu.cs.orange.ocr;
 
-import java.io.File;
-import java.io.IOException;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -33,7 +30,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -62,10 +58,12 @@ import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
 
+import java.io.File;
+import java.io.IOException;
+
 import edu.sfsu.cs.orange.ocr.camera.CameraManager;
 import edu.sfsu.cs.orange.ocr.camera.ShutterButton;
 import edu.sfsu.cs.orange.ocr.language.LanguageCodeHelper;
-import edu.sfsu.cs.orange.ocr.language.TranslateAsyncTask;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -752,6 +750,13 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     sourceLanguageTextView.setText(sourceLanguageReadable);
     TextView ocrResultTextView = (TextView) findViewById(R.id.ocr_result_text_view);
     ocrResultTextView.setText(ocrResult.getText());
+    //call intent
+    Intent handleText = new Intent(getApplicationContext(),HandleResultActivity.class);
+    handleText.putExtra("capture",ocrResult.getText());
+    startActivity(handleText);
+
+
+
     // Crudely scale betweeen 22 and 32 -- bigger font for shorter text
     int scaledSize = Math.max(22, 32 - ocrResult.getText().length() / 4);
     ocrResultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
@@ -759,28 +764,28 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView translationLanguageLabelTextView = (TextView) findViewById(R.id.translation_language_label_text_view);
     TextView translationLanguageTextView = (TextView) findViewById(R.id.translation_language_text_view);
     TextView translationTextView = (TextView) findViewById(R.id.translation_text_view);
-    if (isTranslationActive) {
-      // Handle translation text fields
-      translationLanguageLabelTextView.setVisibility(View.VISIBLE);
-      translationLanguageTextView.setText(targetLanguageReadable);
-      translationLanguageTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL);
-      translationLanguageTextView.setVisibility(View.VISIBLE);
-
-      // Activate/re-activate the indeterminate progress indicator
-      translationTextView.setVisibility(View.GONE);
-      progressView.setVisibility(View.VISIBLE);
-      setProgressBarVisibility(true);
-      
-      // Get the translation asynchronously
-      new TranslateAsyncTask(this, sourceLanguageCodeTranslation, targetLanguageCodeTranslation, 
-          ocrResult.getText()).execute();
-    } else {
-      translationLanguageLabelTextView.setVisibility(View.GONE);
-      translationLanguageTextView.setVisibility(View.GONE);
-      translationTextView.setVisibility(View.GONE);
-      progressView.setVisibility(View.GONE);
-      setProgressBarVisibility(false);
-    }
+//    if (isTranslationActive) {
+//      // Handle translation text fields
+//      translationLanguageLabelTextView.setVisibility(View.VISIBLE);
+//      translationLanguageTextView.setText(targetLanguageReadable);
+//      translationLanguageTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL);
+//      translationLanguageTextView.setVisibility(View.VISIBLE);
+//
+//      // Activate/re-activate the indeterminate progress indicator
+//      translationTextView.setVisibility(View.GONE);
+//      progressView.setVisibility(View.VISIBLE);
+//      setProgressBarVisibility(true);
+//
+//      // Get the translation asynchronously
+//      new TranslateAsyncTask(this, sourceLanguageCodeTranslation, targetLanguageCodeTranslation,
+//          ocrResult.getText()).execute();
+//    } else {
+//      translationLanguageLabelTextView.setVisibility(View.GONE);
+//      translationLanguageTextView.setVisibility(View.GONE);
+//      translationTextView.setVisibility(View.GONE);
+//      progressView.setVisibility(View.GONE);
+//      setProgressBarVisibility(false);
+//    }
     return true;
   }
   

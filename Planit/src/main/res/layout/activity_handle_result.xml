@@ -24,14 +24,14 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/captureValue"
             android:layout_weight="0.56" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send to Jira"
-            android:id="@+id/button"
+            android:id="@+id/sendToJiraBtn"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
 </RelativeLayout>
