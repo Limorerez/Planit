@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\Users\\i040922\\Dev\\planit\\android-ocr-master\\Planit\\build\\intermediates\\res\\merged\\debug\\xml\\preferences.xml",
+        "source": "C:\\Users\\i040922\\Dev\\planit\\android-ocr-master\\Planit\\src\\main\\res\\xml\\preferences.xml"
+    },
+    {
+        "merged": "C:\\Users\\i040922\\Dev\\planit\\JamXPlanit\\Planit\\build\\intermediates\\res\\merged\\debug\\xml\\preferences.xml",
+        "source": "C:\\Users\\i040922\\Dev\\planit\\JamXPlanit\\Planit\\src\\main\\res\\xml\\preferences.xml"
+    },
+    {
+        "merged": "C:\\Users\\i040922\\Dev\\planit\\android-ocr-master\\OCRTest\\build\\intermediates\\res\\merged\\debug\\xml\\preferences.xml",
+        "source": "C:\\Users\\i040922\\Dev\\planit\\android-ocr-master\\OCRTest\\src\\main\\res\\xml\\preferences.xml"
+    }
+]

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\libs\google-api-translate-java-0.98-mod2.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="2eda6905f8b719be023772e5c738d93c6b77210b">
+        <dex dex="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\build\intermediates\pre-dexed\debug\google-api-translate-java-0.98-mod2_e55559ea0ffc95deb3cad42b44bac74b6bd41066.jar" />
+    </item>
+    <item
+        jar="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\build\intermediates\exploded-aar\com.rmtheis\tess-two\5.4.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="360568f833daa8f15e88e7192d50a52e7b0b4aad">
+        <dex dex="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\build\intermediates\pre-dexed\debug\com.rmtheis-tess-two-5.4.0_23d0c97c5bc0f846c344498521d0586cb24f3c39.jar" />
+    </item>
+    <item
+        jar="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\libs\microsoft-translator-java-api-0.6-mod.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="176df3274c901602fe2b6c345326a6990be557b9">
+        <dex dex="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\build\intermediates\pre-dexed\debug\microsoft-translator-java-api-0.6-mod_3d32a4a9f681b0f57cacd58026eca75f0f1658f6.jar" />
+    </item>
+    <item
+        jar="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\libs\jtar-1.0.4.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="b6ff62805312c9384c2f4cc21a6367b74fd2bbd7">
+        <dex dex="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\build\intermediates\pre-dexed\debug\jtar-1.0.4_859158c4729c0c7679a144a94ace69fbd8bc720b.jar" />
+    </item>
+    <item
+        jar="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\libs\json_simple-1.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5e303a03d04e6788dddfa3655272580ae0fc13bb">
+        <dex dex="C:\Users\i040922\Dev\planit\JamXPlanit\Planit\build\intermediates\pre-dexed\debug\json_simple-1.1_9c30a757e09fec58c1c0c17a12a7f228ff807fc6.jar" />
+    </item>
+
+</items>
