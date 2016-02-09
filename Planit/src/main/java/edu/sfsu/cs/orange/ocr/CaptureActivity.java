@@ -186,7 +186,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private String characterBlacklist;
   private String characterWhitelist;
   private ShutterButton shutterButton;
-  private boolean isTranslationActive; // Whether we want to show translations
   private boolean isContinuousModeActive; // Whether we are doing OCR in continuous mode
   private SharedPreferences prefs;
   private OnSharedPreferenceChangeListener listener;
@@ -244,9 +243,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
    
     ocrResultView = (TextView) findViewById(R.id.ocr_result_text_view);
     registerForContextMenu(ocrResultView);
-    translationView = (TextView) findViewById(R.id.translation_text_view);
-    registerForContextMenu(translationView);
-    
+
     progressView = (View) findViewById(R.id.indeterminate_progress_indicator_view);
 
     cameraManager = new CameraManager(getApplication());
@@ -755,37 +752,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     handleText.putExtra("capture",ocrResult.getText());
     startActivity(handleText);
 
-
-
-    // Crudely scale betweeen 22 and 32 -- bigger font for shorter text
-    int scaledSize = Math.max(22, 32 - ocrResult.getText().length() / 4);
-    ocrResultTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, scaledSize);
-
-    TextView translationLanguageLabelTextView = (TextView) findViewById(R.id.translation_language_label_text_view);
-    TextView translationLanguageTextView = (TextView) findViewById(R.id.translation_language_text_view);
-    TextView translationTextView = (TextView) findViewById(R.id.translation_text_view);
-//    if (isTranslationActive) {
-//      // Handle translation text fields
-//      translationLanguageLabelTextView.setVisibility(View.VISIBLE);
-//      translationLanguageTextView.setText(targetLanguageReadable);
-//      translationLanguageTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL), Typeface.NORMAL);
-//      translationLanguageTextView.setVisibility(View.VISIBLE);
-//
-//      // Activate/re-activate the indeterminate progress indicator
-//      translationTextView.setVisibility(View.GONE);
-//      progressView.setVisibility(View.VISIBLE);
-//      setProgressBarVisibility(true);
-//
-//      // Get the translation asynchronously
-//      new TranslateAsyncTask(this, sourceLanguageCodeTranslation, targetLanguageCodeTranslation,
-//          ocrResult.getText()).execute();
-//    } else {
-//      translationLanguageLabelTextView.setVisibility(View.GONE);
-//      translationLanguageTextView.setVisibility(View.GONE);
-//      translationTextView.setVisibility(View.GONE);
-//      progressView.setVisibility(View.GONE);
-//      setProgressBarVisibility(false);
-//    }
     return true;
   }
   
@@ -1023,7 +989,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   private void requestDelayedAutoFocus() {
     // Wait 350 ms before focusing to avoid interfering with quick button presses when
     // the user just wants to take a picture without focusing.
-    cameraManager.requestAutoFocus(350L);
+    //cameraManager.requestAutoFocus(350L);
   }
   
   static boolean getFirstLaunch() {
@@ -1093,7 +1059,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
       setSourceLanguage(prefs.getString(PreferencesActivity.KEY_SOURCE_LANGUAGE_PREFERENCE, CaptureActivity.DEFAULT_SOURCE_LANGUAGE_CODE));
       setTargetLanguage(prefs.getString(PreferencesActivity.KEY_TARGET_LANGUAGE_PREFERENCE, CaptureActivity.DEFAULT_TARGET_LANGUAGE_CODE));
-      isTranslationActive = prefs.getBoolean(PreferencesActivity.KEY_TOGGLE_TRANSLATION, false);
       
       // Retrieve from preferences, and set in this Activity, the capture mode preference
       if (prefs.getBoolean(PreferencesActivity.KEY_CONTINUOUS_PREVIEW, CaptureActivity.DEFAULT_TOGGLE_CONTINUOUS)) {

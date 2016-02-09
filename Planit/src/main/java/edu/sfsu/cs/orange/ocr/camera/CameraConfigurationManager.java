@@ -22,18 +22,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
-
-import edu.sfsu.cs.orange.ocr.PreferencesActivity;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import edu.sfsu.cs.orange.ocr.PreferencesActivity;
 
 /**
  * A class which deals with reading, parsing, and setting the camera parameters which are used to
@@ -116,6 +117,12 @@ final class CameraConfigurationManager {
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
     camera.setParameters(parameters);
+
+    int currentOSVersion = Build.VERSION.SDK_INT;
+    if (currentOSVersion >= 23){
+      camera.setDisplayOrientation(180);
+    }
+
   }
 
   Point getCameraResolution() {

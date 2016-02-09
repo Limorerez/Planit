@@ -1,0 +1,9 @@
+.grable/
+.idea/
+build/
+grable/
+Planit/build/
+local.properties
+gradlew.bat
+gradlew
+gradle.properties

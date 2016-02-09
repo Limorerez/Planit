@@ -17,4 +17,9 @@
  -->
 <resources>
     <string name="app_name">SAP Planit</string>
+
+  <string-array name="sendto_array">
+    <item>JIRA</item>
+    <item>Mail</item>
+  </string-array>
 </resources>
