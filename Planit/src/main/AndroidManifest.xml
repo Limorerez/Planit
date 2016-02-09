@@ -69,9 +69,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".PreferencesActivity" />
-        <activity android:name=".HandleResultActivity" >
+        <activity
+            android:name=".HandleResultActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
         </activity>
+
+        <activity android:name=".PreferencesActivity" />
+
     </application>
 
 </manifest>
