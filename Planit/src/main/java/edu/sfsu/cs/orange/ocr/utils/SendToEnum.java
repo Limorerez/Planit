@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum SendToEnum{
-	JIRA("JIRA"), mail("Mail");
+	JIRA_BLI("JIRA BLI"), JIRA_TASK("JIRA Task"), mail("Mail");
 
 	private final String name;
 	private static Map<String, SendToEnum> valueMap;

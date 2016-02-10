@@ -10,8 +10,8 @@ import edu.sfsu.cs.orange.ocr.R;
  * Created by I049014 on 10/02/2016.
  */
 public class TextAnalizator {
-    private SendToEnum sendTo = SendToEnum.JIRA;
-    private String body;
+    private SendToEnum sendTo = SendToEnum.JIRA_BLI;
+    private String[] body;
     private String id;
     final static Gson gson = new Gson();
 
@@ -25,7 +25,10 @@ public class TextAnalizator {
                 if (valOfSendSplit[0].toUpperCase().equals(context.getString(R.string.mail_identifier))) {
                     sendTo = SendToEnum.mail;
                 } else if (valOfSendSplit[0].toUpperCase().equals(context.getString(R.string.jira_identifier))){
-                    sendTo = SendToEnum.JIRA;
+                    sendTo = SendToEnum.JIRA_BLI;
+                }
+                else if (valOfSendSplit[0].toUpperCase().equals(context.getString(R.string.task_identifier))){
+                    sendTo = SendToEnum.JIRA_TASK;
                 }
                 else {
                     isTypeFound = false;
@@ -36,10 +39,12 @@ public class TextAnalizator {
             }
         }
 
-        body = "";
         int iStart = isTypeFound ? 1 : 0;
+        int iBodyCounter = 0;
+        body = new String[split.length - iStart];
         for(int i = iStart; i < split.length ; i++){
-            body += split[i] + "\n";
+            body[iBodyCounter] = split[i] + "\n";
+            iBodyCounter++;
         }
     }
 
@@ -47,9 +52,16 @@ public class TextAnalizator {
         return sendTo;
     }
 
-
-    public String getBody() {
+    public String[] getBody() {
         return body;
+    }
+
+    public String getBodyAsString() {
+        String res = "";
+        for(int i = 0; i < body.length ; i++){
+            res += body[i];
+        }
+        return res;
     }
 
     public String getId() {
@@ -63,5 +75,9 @@ public class TextAnalizator {
     public static TextAnalizator fromString(String objAsString){
         TextAnalizator txtAnalizator =  gson.fromJson(objAsString, TextAnalizator.class);
         return txtAnalizator;
+    }
+
+    public void setUpdatedBody(String text){
+        body = text.split("/n");
     }
 }
