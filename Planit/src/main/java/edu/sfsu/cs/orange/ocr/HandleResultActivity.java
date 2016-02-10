@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
@@ -24,8 +25,10 @@ import edu.sfsu.cs.orange.ocr.utils.SendToEnum;
 import edu.sfsu.cs.orange.ocr.utils.TextAnalizator;
 
 public class HandleResultActivity extends Activity {
-
+    private int bliCounter = 0;
+    private int taskCounter = 0;
     private int sendType = 0;
+    private HashMap bliResult = new HashMap();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,12 +120,25 @@ public class HandleResultActivity extends Activity {
     }
 
     private void createJiraItem(final String [] SummaryData , String type, final String cookie , final String bliParent ) throws JSONException {
+        bliCounter = 0;
         switch (type) {
             case "JIRA BLI":
                 ConnectionManager.getInstance(HandleResultActivity.this).createBLI(cookie, SummaryData, new ConnectionManager.ServerRequestListener() {
                     @Override
                     public void onSuccess(Object data) {
-    int x = 1;
+                        try {
+                            bliCounter++;
+                            JSONObject json = new JSONObject(data.toString());
+                            bliResult.put(json.get("key"),json.get("self"));
+                            if ( bliCounter == SummaryData.length){
+                                //Send message
+                                bliResult.clear();
+                                bliCounter = 0;
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
 
@@ -132,22 +148,35 @@ int x = 2;
                     }
                 });
                 break;
-            case "JIRA TASK":
+            case "JIRA Task":
                 ConnectionManager.getInstance(HandleResultActivity.this).getBLIID(cookie, bliParent, new ConnectionManager.ServerRequestListener() {
                     @Override
                     public void onSuccess(Object data)  {
+                        taskCounter = 0;
                         try {
                             JSONObject json = new JSONObject(data.toString());
                             ConnectionManager.getInstance(HandleResultActivity.this).createTask(cookie, SummaryData, json.getString("id"), new ConnectionManager.ServerRequestListener() {
                                 @Override
                                 public void onSuccess(Object data) {
-    int x = 10;
+                                    try {
+                                        taskCounter++;
+                                        JSONObject json = new JSONObject(data.toString());
+                                        bliResult.put(json.get("key"),json.get("self"));
+                                        if ( taskCounter == SummaryData.length){
+                                            //Send message
+                                            bliResult.clear();
+                                            bliCounter = 0;
+                                        }
+
+                                    } catch (JSONException e) {
+
+                                    }
 
                                 }
 
                                 @Override
                                 public void onError(Object data) {
-int x = 11;
+
                                 }
                             });
                         } catch (JSONException e) {
