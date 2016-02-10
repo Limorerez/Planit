@@ -36,6 +36,7 @@ public class ALSRequest extends Request<String> {
     private String authorizationString;
     private RequestQueue queue;
     private static final String TAG = "NETWORK";
+    private static String cookie;
     private String url;
     private String service;
     private static Context mContext;
@@ -64,7 +65,7 @@ public class ALSRequest extends Request<String> {
 
         this.listener = listener;
         this.params = params;
-
+        NukeSSLCerts.nuke();
        // NukeSSLCerts nuke = new NukeSSLCerts();
 
         this.errorListener = errorListener;
@@ -76,6 +77,50 @@ public class ALSRequest extends Request<String> {
         setService(url);
         send();
     }
+
+    public ALSRequest(String cookie , int method, String url, JSONObject params, Listener<String> listener, ErrorListener errorListener) {
+
+
+//        super(method, url, (stringBodyRequest == null || stringBodyRequest.length() == 0) ? null : stringBodyRequest, listener,	errorListener);
+        super(method, url, errorListener);
+        this.cookie = cookie;
+        this.listener = listener;
+        this.params = params;
+        NukeSSLCerts.nuke();
+        // NukeSSLCerts nuke = new NukeSSLCerts();
+
+        this.errorListener = errorListener;
+        this.queue = Volley.newRequestQueue(mContext.getApplicationContext());
+        this.url = url;
+        showLoader = true;
+        progressDialog = new ProgressDialog(mContext);
+        loading = "Loading";
+        setService(url);
+        send();
+    }
+
+
+    public ALSRequest(String cookie , int method, String url, JSONObject params, Listener<String> listener, ErrorListener errorListener, boolean showLoader) {
+
+//        super(method, url, (stringBodyRequest == null || stringBodyRequest.length() == 0) ? null : stringBodyRequest, listener,	errorListener);
+        super(method, url, errorListener);
+        this.cookie = cookie;
+        this.listener = listener;
+        this.params = params;
+        NukeSSLCerts.nuke();
+
+        this.errorListener = errorListener;
+        this.queue = Volley.newRequestQueue(mContext.getApplicationContext());
+        // ;
+        this.url = url;
+        setService(url);
+        progressDialog = new ProgressDialog(mContext);
+        loading = "Loading...";
+        this.showLoader = showLoader;
+        send();
+    }
+
+
 
     public ALSRequest(int method, String url, JSONObject params, Listener<String> listener, ErrorListener errorListener, boolean showLoader) {
 
@@ -151,7 +196,7 @@ public class ALSRequest extends Request<String> {
                 || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
         }
-        headers.put("cookie","JSESSIONID=F6DEA2D5BEDDA13642343EF98363D071");
+        headers.put("cookie",this.cookie);
  //        PrizeForLifeApplication.get().addSessionCookie(headers);
 
         return headers;

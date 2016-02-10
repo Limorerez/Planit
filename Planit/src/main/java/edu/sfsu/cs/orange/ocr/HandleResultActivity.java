@@ -42,7 +42,15 @@ public class HandleResultActivity extends Activity {
                 String selectedOption = spnSendTo.getSelectedItem().toString();
                 if (selectedOption.equals("JIRA")) {
                     try {
-                        sendToJira();
+                        String type = "BLI";
+                        String [] SummaryData = {"sum1","sum2","sum3"};
+                        String bliParent = "";
+
+//                        String type = "TASK";
+//                        String [] SummaryData = ["task1","task2","task3"];
+//                        bliParent = "";
+
+                        sendToJira(type , SummaryData , bliParent);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -52,16 +60,16 @@ public class HandleResultActivity extends Activity {
         });
     }
 
-    private void sendToJira() throws JSONException {
-        //yossi put your code here !!!!!
-        ConnectionManager.getInstance(HandleResultActivity.this).loginUser("", "", new ConnectionManager.ServerRequestListener() {
+    private void sendToJira(final String type , final String [] SummaryData , final String bliParent) throws JSONException {
+
+        ConnectionManager.getInstance(HandleResultActivity.this).getCookie(SummaryData ,new ConnectionManager.ServerRequestListener() {
+
             @Override
             public void onSuccess(Object data) {
-
                 try {
-                    int v = 9;
-
-                } catch (Exception e) {
+                    String cookie = "";
+                    createJiraItem(SummaryData , type , cookie , bliParent);
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -69,6 +77,7 @@ public class HandleResultActivity extends Activity {
 
             @Override
             public void onError(Object data) {
+<<<<<<< HEAD
                 try {
                     int v = 9;
 
@@ -76,11 +85,14 @@ public class HandleResultActivity extends Activity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+=======
+>>>>>>> http call
 
             }
         });
     }
 
+<<<<<<< HEAD
     @Override
     protected void onResume() {
         super.onResume();
@@ -94,5 +106,41 @@ public class HandleResultActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
+=======
+    }
+
+    private void createJiraItem(String [] SummaryData , String type, String cookie , String bliParent ) throws JSONException {
+        switch (type) {
+            case "BLI":
+                ConnectionManager.getInstance(HandleResultActivity.this).createBLI(cookie , SummaryData ,new ConnectionManager.ServerRequestListener() {
+                    @Override
+                    public void onSuccess(Object data) {
+
+
+                    }
+
+                    @Override
+                    public void onError(Object data) {
+
+                    }
+                });
+                break;
+            case "TASK":
+                ConnectionManager.getInstance(HandleResultActivity.this).createTask(cookie,SummaryData, bliParent , new ConnectionManager.ServerRequestListener() {
+                    @Override
+                    public void onSuccess(Object data) {
+
+
+                    }
+
+                    @Override
+                    public void onError(Object data) {
+
+                    }
+                });
+
+                break;
+        }
+>>>>>>> http call
     }
 }
