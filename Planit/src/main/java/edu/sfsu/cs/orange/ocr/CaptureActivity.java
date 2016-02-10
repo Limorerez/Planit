@@ -355,18 +355,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // Comment out the following block to test non-OCR functions without an SD card
     
     // Do OCR engine initialization, if necessary
-    //boolean doNewInit = (baseApi == null) || !sourceLanguageCodeOcr.equals(previousSourceLanguageCodeOcr) ||
-      //  ocrEngineMode != previousOcrEngineMode;
-//    if (doNewInit) {
-//      // Initialize the OCR engine
-//      File storageDirectory = getStorageDirectory();
-//      if (storageDirectory != null) {
-//        initOcrEngine(storageDirectory, sourceLanguageCodeOcr, sourceLanguageReadable);
-//      }
-//    } else {
-//      // We already have the engine initialized, so just start the camera.
+    boolean doNewInit = (baseApi == null) || !sourceLanguageCodeOcr.equals(previousSourceLanguageCodeOcr) ||
+        ocrEngineMode != previousOcrEngineMode;
+    if (doNewInit) {
+      // Initialize the OCR engine
+      File storageDirectory = getStorageDirectory();
+      if (storageDirectory != null) {
+        initOcrEngine(storageDirectory, sourceLanguageCodeOcr, sourceLanguageReadable);
+      }
+    } else {
+      // We already have the engine initialized, so just start the camera.
       resumeOCR();
-    //}
+    }
   }
   
   /** 
