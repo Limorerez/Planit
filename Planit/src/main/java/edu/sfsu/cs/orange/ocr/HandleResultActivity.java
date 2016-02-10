@@ -13,8 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,48 +48,59 @@ public class HandleResultActivity extends Activity {
             public void onClick(View v) {
                 textAnalizator.setUpdatedBody(captureResult.getText().toString());
                 String selectedOption = spnSendTo.getSelectedItem().toString();
-                if (selectedOption.equals("JIRA")) {
+                if (selectedOption.contains("JIRA")) {
                     try {
-                        String type = "BLI";
-                        String [] SummaryData = {"sum1","sum2","sum3"};
-                        String bliParent = "";
+                        //      String type = "JIRA TASK";
+                        // String [] SummaryData = {"sum11","sum22","sum33"};
+                        // String [] SummaryData = {"sum1"};
+                        // String bliParent = "";
 
 //                        String type = "TASK";
-//                        String [] SummaryData = ["task1","task2","task3"];
-//                        bliParent = "";
+                        // String [] SummaryData = {"task1","task2","task3"};
+                        // String bliParent = "104";
 
-                        sendToJira(type , SummaryData , bliParent);
+                        sendToJira(selectedOption, textAnalizator.getBody(), textAnalizator.getId());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-
-            }
-        });
-    }
-
-    private void sendToJira(final String type , final String [] SummaryData , final String bliParent) throws JSONException {
-
-        ConnectionManager.getInstance(HandleResultActivity.this).getCookie(SummaryData ,new ConnectionManager.ServerRequestListener() {
-
-            @Override
-            public void onSuccess(Object data) {
-                try {
-                    String cookie = "";
-                    createJiraItem(SummaryData , type , cookie , bliParent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (selectedOption.equals("Mail")) {
+                    createMailItem(captureResult.getText());
                 }
 
             }
-
-            @Override
-            public void onError(Object data) {
-
-            }
         });
     }
-    
+
+    private void sendToJira(final String type, final String[] SummaryData, final String bliParent) throws JSONException {
+
+        // ConnectionManager.getInstance(HandleResultActivity.this).getCookie(SummaryData ,new ConnectionManager.ServerRequestListener() {
+
+        //   @Override
+        // public void onSuccess(Object data) {
+        try {
+            String cookie = "DAE930B38B6BB9B0E9D7CADDC5734034";
+            createJiraItem(SummaryData, type, cookie, bliParent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+          //  @Override
+           // public void onError(Object data) {
+            //    try {
+             //       int v = 9;
+
+
+     //           } catch (Exception e) {
+      //              e.printStackTrace();
+        //        }
+
+          //  }
+       // });
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -103,29 +114,45 @@ public class HandleResultActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-
     }
 
-    private void createJiraItem(String [] SummaryData , String type, String cookie , String bliParent ) throws JSONException {
+    private void createJiraItem(final String [] SummaryData , String type, final String cookie , final String bliParent ) throws JSONException {
         switch (type) {
-            case "BLI":
-                ConnectionManager.getInstance(HandleResultActivity.this).createBLI(cookie , SummaryData ,new ConnectionManager.ServerRequestListener() {
+            case "JIRA BLI":
+                ConnectionManager.getInstance(HandleResultActivity.this).createBLI(cookie, SummaryData, new ConnectionManager.ServerRequestListener() {
                     @Override
                     public void onSuccess(Object data) {
-
+    int x = 1;
 
                     }
 
                     @Override
                     public void onError(Object data) {
-
+int x = 2;
                     }
                 });
                 break;
-            case "TASK":
-                ConnectionManager.getInstance(HandleResultActivity.this).createTask(cookie,SummaryData, bliParent , new ConnectionManager.ServerRequestListener() {
+            case "JIRA TASK":
+                ConnectionManager.getInstance(HandleResultActivity.this).getBLIID(cookie, bliParent, new ConnectionManager.ServerRequestListener() {
                     @Override
-                    public void onSuccess(Object data) {
+                    public void onSuccess(Object data)  {
+                        try {
+                            JSONObject json = new JSONObject(data.toString());
+                            ConnectionManager.getInstance(HandleResultActivity.this).createTask(cookie, SummaryData, json.getString("id"), new ConnectionManager.ServerRequestListener() {
+                                @Override
+                                public void onSuccess(Object data) {
+    int x = 10;
+
+                                }
+
+                                @Override
+                                public void onError(Object data) {
+int x = 11;
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
                     }
@@ -135,6 +162,7 @@ public class HandleResultActivity extends Activity {
 
                     }
                 });
+
 
                 break;
         }
@@ -186,4 +214,6 @@ public class HandleResultActivity extends Activity {
         startActivity(openInChooser);
 
     }
+
+
 }

@@ -2,6 +2,7 @@ package edu.sfsu.cs.orange.ocr.network;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ALSRequest extends Request<String> {
+public class ALSRequest extends Request<String>  {
     protected static final String PROTOCOL_CHARSET = "utf-8";
     /**
      * Content type for request.
@@ -143,6 +144,8 @@ public class ALSRequest extends Request<String> {
     }
 
 
+
+
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {
         return super.getParams();
@@ -196,7 +199,7 @@ public class ALSRequest extends Request<String> {
                 || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
         }
-        headers.put("cookie",this.cookie);
+        headers.put("cookie","JSESSIONID=DAE930B38B6BB9B0E9D7CADDC5734034");
  //        PrizeForLifeApplication.get().addSessionCookie(headers);
 
         return headers;
