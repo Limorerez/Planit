@@ -1,18 +1,25 @@
 package edu.sfsu.cs.orange.ocr;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +36,9 @@ public class HandleResultActivity extends Activity {
     private int taskCounter = 0;
     private int sendType = 0;
     private HashMap bliResult = new HashMap();
+
+    private Spinner spnSendTo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +49,30 @@ public class HandleResultActivity extends Activity {
         captureResult.setText(textAnalizator.getBodyAsString());
 
         final Spinner spnSendTo = (Spinner) findViewById(R.id.spn_sendto);
-        ArrayAdapter<SendToEnum> adapter = new ArrayAdapter<SendToEnum>(this, android.R.layout.simple_spinner_item, SendToEnum.values());
+        final ArrayAdapter<SendToEnum> adapter = new ArrayAdapter<SendToEnum>(this, android.R.layout.simple_spinner_item, SendToEnum.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnSendTo.setAdapter(adapter);
         int pos = adapter.getPosition(textAnalizator.getSendTo());
         spnSendTo.setSelection(pos);
+        spnSendTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                SendToEnum selVal = (SendToEnum) spnSendTo.getSelectedItem();
+                LinearLayout llTask = (LinearLayout) findViewById(R.id.ll_task_number);
+                llTask.setVisibility(selVal == SendToEnum.JIRA_TASK ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+
+        if (textAnalizator.getSendTo() == SendToEnum.JIRA_TASK){
+            EditText task_number_edt = (EditText)findViewById(R.id.task_num);
+            task_number_edt.setText(textAnalizator.getId());
+        }
 
         ImageButton jiraBtn = (ImageButton) findViewById(R.id.sendToJiraBtn);
         jiraBtn.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +99,6 @@ public class HandleResultActivity extends Activity {
                 if (selectedOption.equals("Mail")) {
                     createMailItem(captureResult.getText());
                 }
-
             }
         });
     }
@@ -131,7 +159,7 @@ public class HandleResultActivity extends Activity {
                             JSONObject json = new JSONObject(data.toString());
                             bliResult.put(json.get("key"),json.get("self"));
                             if ( bliCounter == SummaryData.length){
-                                //Send message
+                                showSuccessDialog("Back Log items", bliResult);
                                 bliResult.clear();
                                 bliCounter = 0;
                             }
@@ -163,7 +191,7 @@ int x = 2;
                                         JSONObject json = new JSONObject(data.toString());
                                         bliResult.put(json.get("key"),json.get("self"));
                                         if ( taskCounter == SummaryData.length){
-                                            //Send message
+                                            showSuccessDialog("Back Log items", bliResult);
                                             bliResult.clear();
                                             bliCounter = 0;
                                         }
@@ -182,8 +210,6 @@ int x = 2;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
-
                     }
 
                     @Override
@@ -191,8 +217,6 @@ int x = 2;
 
                     }
                 });
-
-
                 break;
         }
     }
@@ -216,6 +240,7 @@ int x = 2;
 
             if (packageName.equals("com.whatsapp")) {
                 intent.setPackage(packageName);
+                intent.putExtra("chat", true);
                 intentList.add(intent);
            }else if (packageName.equals("com.android.mms")) {
                 Intent smsIntent = new Intent(Intent.ACTION_SEND);
@@ -224,10 +249,6 @@ int x = 2;
                 smsIntent.putExtra("sms_body", sText);
                 smsIntent.setPackage(packageName);
                 intentList.add(smsIntent);
-            }
-            else if (packageName.equals("ru.ok.android")) {
-                intent.setPackage(packageName);
-                intentList.add(intent);
             }
             else if (packageName.equals("com.google.android.gm")) {
                 intent.setPackage(packageName);
@@ -241,7 +262,26 @@ int x = 2;
 
         openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
         startActivity(openInChooser);
+    }
 
+    private void showSuccessDialog(String title, HashMap<String, String> jiraResults){
+        final TextView messageCtrl = new TextView(this);
+        String message = "";
+        for (String key: jiraResults.keySet()) {
+            message += key + " : " + jiraResults.get(key) + "\n\n";
+        }
+        final SpannableString s = new SpannableString(message);
+        Linkify.addLinks(s, Linkify.ALL);
+
+        final AlertDialog d = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(R.drawable.planitlogo2)
+                .setMessage( s )
+                .create();
+
+        d.show();
+        messageCtrl.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
 

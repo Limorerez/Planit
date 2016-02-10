@@ -26,9 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:weightSum="100"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:background="#fefefe">
 
@@ -36,17 +34,9 @@
                 android:id="@+id/lbl_sendto"
                 style="@style/textbox"
                 android:layout_width="wrap_content"
+                android:fontFamily="sans-serif-light"
                 android:text="Send text to "
                 android:layout_marginLeft="10dp" />
-
-            <!--<com.rey.material.widget.Spinner
-                android:id="@+id/spn_sendto"
-                style="@style/Material.Widget.Spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="60"
-                android:layout_marginLeft="5dp"
-                app:rd_style="@style/Material.Drawable.Ripple.Wave"/>-->
 
            <Spinner
                 android:id="@+id/spn_sendto"
@@ -54,19 +44,45 @@
                 android:layout_width="0dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="50dp"
-                android:layout_weight="60" />
+                android:fontFamily="sans-serif-light"
+                android:layout_weight="40" />
 
+            <LinearLayout
+                android:id="@+id/ll_task_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_weight="40">
+
+                <TextView
+                    android:id="@+id/lbl_taskId"
+                    style="@style/textbox"
+                    android:layout_width="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Id : "
+                    android:layout_marginLeft="10dp" />
+                <EditText
+                    android:id="@+id/task_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:fontFamily="sans-serif-light"
+                    android:layout_weight="25"/>
+            </LinearLayout>
         </LinearLayout>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:inputType="textMultiLine"
+            android:ems="10"
             android:id="@+id/captureValue"
             android:textAlignment="gravity"
             android:gravity="top"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
             android:background="#fefefe"
+            android:fontFamily="sans-serif-light"
             android:layout_marginBottom="10dp" />
     </LinearLayout>
 
@@ -77,7 +93,7 @@
         android:onClick="submitUpdateResult"
         android:src="@android:drawable/ic_menu_send"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
