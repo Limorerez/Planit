@@ -81,6 +81,6 @@ public class TextAnalizator {
     }
 
     public void setUpdatedBody(String text){
-        body = text.split("/n");
+        body = text.split("\n");
     }
 }
