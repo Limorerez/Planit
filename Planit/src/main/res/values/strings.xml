@@ -17,13 +17,13 @@
  -->
 <resources>
     <string name="app_name">SAP Planit</string>
-  <string-array name="sendto_array">
-    <item>JIRA</item>
-    <item>Mail</item>
-  </string-array>
-  <string name="url_server">https://sapjira.wdf.sap.corp/rest/api/2/issue/</string>
+     <string-array name="sendto_array">
+        <item>JIRA</item>
+        <item>Mail</item>
+     </string-array>
 
-  <string name="url_server">https://sapjira.wdf.sap.corp/rest/api/2/project/RAKJIRA</string>
+    <string name="url_server">https://sapjira.wdf.sap.corp/rest/api/2/issue/</string>
+
     <string name="jira_identifier">BLI</string>
     <string name="mail_identifier">MOM</string>
     <string name="task_identifier">TASK</string>
