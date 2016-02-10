@@ -355,18 +355,18 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     // Comment out the following block to test non-OCR functions without an SD card
     
     // Do OCR engine initialization, if necessary
-    boolean doNewInit = (baseApi == null) || !sourceLanguageCodeOcr.equals(previousSourceLanguageCodeOcr) || 
-        ocrEngineMode != previousOcrEngineMode;
-    if (doNewInit) {      
-      // Initialize the OCR engine
-      File storageDirectory = getStorageDirectory();
-      if (storageDirectory != null) {
-        initOcrEngine(storageDirectory, sourceLanguageCodeOcr, sourceLanguageReadable);
-      }
-    } else {
-      // We already have the engine initialized, so just start the camera.
+    //boolean doNewInit = (baseApi == null) || !sourceLanguageCodeOcr.equals(previousSourceLanguageCodeOcr) ||
+      //  ocrEngineMode != previousOcrEngineMode;
+//    if (doNewInit) {
+//      // Initialize the OCR engine
+//      File storageDirectory = getStorageDirectory();
+//      if (storageDirectory != null) {
+//        initOcrEngine(storageDirectory, sourceLanguageCodeOcr, sourceLanguageReadable);
+//      }
+//    } else {
+//      // We already have the engine initialized, so just start the camera.
       resumeOCR();
-    }
+    //}
   }
   
   /** 
@@ -753,6 +753,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextAnalizator textAnalizator = new TextAnalizator(getBaseContext(), ocrResult.getText());
 
     Intent handleText = new Intent(getApplicationContext(),HandleResultActivity.class);
+
     handleText.putExtra("capture",textAnalizator.asString());
     startActivity(handleText);
 
@@ -1016,19 +1017,19 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
       } else {
         isFirstLaunch = false;
       }
-      if (currentVersion > lastVersion) {
-        
-        // Record the last version for which we last displayed the What's New (Help) page
-        prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
-        Intent intent = new Intent(this, HelpActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        
-        // Show the default page on a clean install, and the what's new page on an upgrade.
-        String page = lastVersion == 0 ? HelpActivity.DEFAULT_PAGE : HelpActivity.WHATS_NEW_PAGE;
-        intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
-        startActivity(intent);
-        return true;
-      }
+//      if (currentVersion > lastVersion) {
+//
+//        // Record the last version for which we last displayed the What's New (Help) page
+//        prefs.edit().putInt(PreferencesActivity.KEY_HELP_VERSION_SHOWN, currentVersion).commit();
+//        Intent intent = new Intent(this, HelpActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+//
+//        // Show the default page on a clean install, and the what's new page on an upgrade.
+//        String page = HelpActivity.DEFAULT_PAGE;
+//        intent.putExtra(HelpActivity.REQUESTED_PAGE_KEY, page);
+//        startActivity(intent);
+//        return true;
+//      }
     } catch (PackageManager.NameNotFoundException e) {
       Log.w(TAG, e);
     }
