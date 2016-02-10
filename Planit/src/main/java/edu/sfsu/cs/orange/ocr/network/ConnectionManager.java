@@ -79,7 +79,7 @@ public class ConnectionManager {
         for ( int i = 0 ; i < SummaryData.length ; i++){
             //String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'summary':'BLI new test', 'description':'Yossi is an a developer', 'issuetype':{ 'id':'6' }}}" ;
 
-            String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'summary':'" + SummaryData[i] + "', 'description':" + SummaryData[i] +"' , 'issuetype':{ 'id':'6' }}}" ;
+            String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'summary':'" + SummaryData[i] + "', 'description':'" + SummaryData[i] +"' , 'issuetype':{ 'id':'6' }}}" ;
 
             JSONObject params = new JSONObject(payload);
 
@@ -103,27 +103,52 @@ public class ConnectionManager {
 
     }
 
+    public void getBLIID(String cookie, String bliParentKey , final ServerRequestListener listener) throws JSONException {
+
+           // String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'parent':{'key':'" +bliParent +"' },'summary':'" + SummaryData[i] + "', 'description':" + SummaryData[i] + "' , 'issuetype':{ 'id':'5' }}}";
+            JSONObject params = null;
+
+
+            String url = "https://sapjira.wdf.sap.corp/rest/api/2/issue/RAKJIRA-" + bliParentKey ;
+            ALSRequest req = new ALSRequest(cookie, Request.Method.GET, url,
+                    params, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    listener.onSuccess(response);
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    listener.onError(error.toString());
+                }
+            }, false);
+    }
     public void createTask(String cookie, String [] SummaryData, String bliParent, final ServerRequestListener listener) throws JSONException {
         //  InputStream keyStore = getResources().openRawResource(R.raw.pk);
-        String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'summary':'BLI new test', 'description':'Yossi is an a developer', 'issuetype':{ 'id':'6' }}}" ;
-        JSONObject params = new JSONObject(payload);
+       // String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'summary':'BLI new test', 'description':'Yossi is an a developer', 'issuetype':{ 'id':'6' }}}" ;
+        for ( int i = 0 ; i < SummaryData.length ; i++) {
+            String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'parent':{'key':'" +bliParent +"' },'summary':'" + SummaryData[i] + "', 'description':'" + SummaryData[i] + "' , 'issuetype':{ 'id':'5' }}}";
+            JSONObject params = new JSONObject(payload);
 
 
-        String url = BASE_URL;//+ "j_spring_security_check?j_username=" + "i040922" + "&j_password=" + "Leeebsay2609";
-        ALSRequest req = new ALSRequest(cookie , Request.Method.POST, url,
-                params, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                listener.onSuccess(response);
+            String url = "https://sapjira.wdf.sap.corp/rest/api/2/issue/";
+            ALSRequest req = new ALSRequest(cookie, Request.Method.POST, url,
+                    params, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    listener.onSuccess(response);
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                listener.onError(error.toString());
-            }
-        }, false);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                    listener.onError(error.toString());
+                }
+            }, false);
+        }
     }
 
 
