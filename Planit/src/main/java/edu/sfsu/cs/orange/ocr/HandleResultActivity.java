@@ -77,22 +77,12 @@ public class HandleResultActivity extends Activity {
 
             @Override
             public void onError(Object data) {
-<<<<<<< HEAD
-                try {
-                    int v = 9;
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-=======
->>>>>>> http call
 
             }
         });
     }
 
-<<<<<<< HEAD
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -106,7 +96,7 @@ public class HandleResultActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-=======
+
     }
 
     private void createJiraItem(String [] SummaryData , String type, String cookie , String bliParent ) throws JSONException {
@@ -141,6 +131,5 @@ public class HandleResultActivity extends Activity {
 
                 break;
         }
->>>>>>> http call
     }
 }
