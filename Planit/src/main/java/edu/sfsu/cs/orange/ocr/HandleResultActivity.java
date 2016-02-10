@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
+
 public class HandleResultActivity extends Activity {
 
     private int sendType = 0;
@@ -40,7 +42,34 @@ public class HandleResultActivity extends Activity {
 
 
     }
+
     private void sendToJira(){
         //yossi put your code here !!!!!
-    }
+        ConnectionManager.getInstance(HandleResultActivity.this).loginUser("","",new ConnectionManager.ServerRequestListener() {
+            @Override
+            public void onSuccess(Object data) {
+
+                try {
+                    int v = 9;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Object data) {
+                try{
+                    int v = 9;
+
+
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        }
 }
