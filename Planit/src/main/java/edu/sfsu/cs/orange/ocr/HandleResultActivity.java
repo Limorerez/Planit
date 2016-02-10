@@ -1,15 +1,22 @@
 package edu.sfsu.cs.orange.ocr;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-
 import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
 import edu.sfsu.cs.orange.ocr.utils.SendToEnum;
@@ -55,6 +62,9 @@ public class HandleResultActivity extends Activity {
                         e.printStackTrace();
                     }
                 }
+                if (selectedOption.equals("Mail")) {
+                    createMailItem(captureResult.getText());
+                }
 
             }
         });
@@ -72,7 +82,6 @@ public class HandleResultActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -81,7 +90,6 @@ public class HandleResultActivity extends Activity {
             }
         });
     }
-
 
     @Override
     protected void onResume() {
@@ -131,5 +139,52 @@ public class HandleResultActivity extends Activity {
 
                 break;
         }
+    }
+
+    private void createMailItem(Editable sText){
+        PackageManager pm = getPackageManager();
+        Intent sendIntent = new Intent(Intent.ACTION_SEND);
+        sendIntent.setType("text/plain");
+
+        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
+        List<Intent> intentList = new ArrayList<Intent>();
+        for (int i = 0; i < resInfo.size(); i++) {
+            // Extract the label, append it, and repackage it in a LabeledIntent
+            ResolveInfo ri = resInfo.get(i);
+            String packageName = ri.activityInfo.packageName;
+
+            Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+            intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
+            intent.setType("text/plain"); // put here your mime type
+            intent.putExtra(Intent.EXTRA_TEXT, sText);
+
+            if (packageName.equals("com.whatsapp")) {
+                intent.setPackage(packageName);
+                intentList.add(intent);
+           }else if (packageName.equals("com.android.mms")) {
+                Intent smsIntent = new Intent(Intent.ACTION_SEND);
+                smsIntent.setComponent(intent.resolveActivity(pm));
+                smsIntent.setType("vnd.android-dir/mms-sms");
+                smsIntent.putExtra("sms_body", sText);
+                smsIntent.setPackage(packageName);
+                intentList.add(smsIntent);
+            }
+            else if (packageName.equals("ru.ok.android")) {
+                intent.setPackage(packageName);
+                intentList.add(intent);
+            }
+            else if (packageName.equals("com.google.android.gm")) {
+                intent.setPackage(packageName);
+                intentList.add(intent);
+            }
+        }
+
+        // convert intentList to array
+        Intent openInChooser = Intent.createChooser(intentList.remove(0),"Message option choose");
+        Intent[] extraIntents = intentList.toArray( new Intent[ intentList.size() ]);
+
+        openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+        startActivity(openInChooser);
+
     }
 }
