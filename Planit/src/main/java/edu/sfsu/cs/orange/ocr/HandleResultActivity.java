@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+import org.json.JSONException;
+
 import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
 
 public class HandleResultActivity extends Activity {
@@ -33,7 +35,11 @@ public class HandleResultActivity extends Activity {
             public void onClick(View v) {
                 String selectedOption = spnSendTo.getSelectedItem().toString();
                 if (selectedOption.equals("JIRA")) {
-                    sendToJira();
+                    try {
+                        sendToJira();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -43,7 +49,7 @@ public class HandleResultActivity extends Activity {
 
     }
 
-    private void sendToJira(){
+    private void sendToJira() throws JSONException {
         //yossi put your code here !!!!!
         ConnectionManager.getInstance(HandleResultActivity.this).loginUser("","",new ConnectionManager.ServerRequestListener() {
             @Override

@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -54,12 +55,15 @@ public class ConnectionManager {
     }
 
 
-    public void loginUser(String user, String password, final ServerRequestListener listener) {
-        InputStream keyStore = getResources().openRawResource(R.raw.pk);
+    public void loginUser(String user, String password, final ServerRequestListener listener) throws JSONException {
+      //  InputStream keyStore = getResources().openRawResource(R.raw.pk);
+        String payload = "{ 'fields':{ 'project':{  'id':'33636' },'priority':{  'id':'2' }, 'assignee':{  'name':null  },'summary':'BLI new test', 'description':'Yossi is an a developer', 'issuetype':{ 'id':'6' }}}" ;
+        JSONObject params = new JSONObject(payload);
+
 
         String url = BASE_URL;//+ "j_spring_security_check?j_username=" + "i040922" + "&j_password=" + "Leeebsay2609";
-        ALSRequest req = new ALSRequest(Request.Method.GET, url,
-                null, new Response.Listener<String>() {
+        ALSRequest req = new ALSRequest(Request.Method.POST, url,
+                params, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 listener.onSuccess(response);

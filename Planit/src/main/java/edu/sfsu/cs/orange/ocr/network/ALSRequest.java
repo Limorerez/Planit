@@ -65,6 +65,7 @@ public class ALSRequest extends Request<String> {
         this.listener = listener;
         this.params = params;
 
+       // NukeSSLCerts nuke = new NukeSSLCerts();
 
         this.errorListener = errorListener;
         this.queue = Volley.newRequestQueue(mContext.getApplicationContext());
@@ -83,11 +84,11 @@ public class ALSRequest extends Request<String> {
 
         this.listener = listener;
         this.params = params;
-
+        NukeSSLCerts.nuke();
 
         this.errorListener = errorListener;
-        this.queue = Volley.newRequestQueue(mContext.getApplicationContext(),new ExtHttpClientStack                                         new ExtHttpClientStack(new SslHttpClient(keyStore, "test123", 44401)));
-        ;
+        this.queue = Volley.newRequestQueue(mContext.getApplicationContext());
+       // ;
         this.url = url;
         setService(url);
         progressDialog = new ProgressDialog(mContext);
@@ -150,8 +151,8 @@ public class ALSRequest extends Request<String> {
                 || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
         }
-
-//        PrizeForLifeApplication.get().addSessionCookie(headers);
+        headers.put("cookie","JSESSIONID=F6DEA2D5BEDDA13642343EF98363D071");
+ //        PrizeForLifeApplication.get().addSessionCookie(headers);
 
         return headers;
     }
