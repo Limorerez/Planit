@@ -11,6 +11,8 @@ import android.widget.Spinner;
 import org.json.JSONException;
 
 import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
+import edu.sfsu.cs.orange.ocr.utils.SendToEnum;
+import edu.sfsu.cs.orange.ocr.utils.TextAnalizator;
 
 public class HandleResultActivity extends Activity {
 
@@ -21,13 +23,16 @@ public class HandleResultActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_result);
         String capture = getIntent().getExtras().getString("capture");
+        TextAnalizator textAnalizator = TextAnalizator.fromString(capture);
         EditText captureResult = (EditText) findViewById(R.id.captureValue);
-        captureResult.setText(capture);
+        captureResult.setText(textAnalizator.getBody());
 
         final Spinner spnSendTo = (Spinner) findViewById(R.id.spn_sendto);
         ArrayAdapter<SendToEnum> adapter = new ArrayAdapter<SendToEnum>(this, android.R.layout.simple_spinner_item, SendToEnum.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnSendTo.setAdapter(adapter);
+        int pos = adapter.getPosition(textAnalizator.getSendTo());
+        spnSendTo.setSelection(pos);
 
         ImageButton jiraBtn = (ImageButton) findViewById(R.id.sendToJiraBtn);
         jiraBtn.setOnClickListener(new View.OnClickListener() {

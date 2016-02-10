@@ -1,4 +1,4 @@
-package edu.sfsu.cs.orange.ocr;
+package edu.sfsu.cs.orange.ocr.utils;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -64,6 +64,7 @@ import java.io.IOException;
 import edu.sfsu.cs.orange.ocr.camera.CameraManager;
 import edu.sfsu.cs.orange.ocr.camera.ShutterButton;
 import edu.sfsu.cs.orange.ocr.language.LanguageCodeHelper;
+import edu.sfsu.cs.orange.ocr.utils.TextAnalizator;
 
 /**
  * This activity opens the camera and does the actual scanning on a background thread. It draws a
@@ -748,8 +749,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     TextView ocrResultTextView = (TextView) findViewById(R.id.ocr_result_text_view);
     ocrResultTextView.setText(ocrResult.getText());
     //call intent
+
+    TextAnalizator textAnalizator = new TextAnalizator(getBaseContext(), ocrResult.getText());
+
     Intent handleText = new Intent(getApplicationContext(),HandleResultActivity.class);
-    handleText.putExtra("capture",ocrResult.getText());
+    handleText.putExtra("capture",textAnalizator.asString());
     startActivity(handleText);
 
     return true;
