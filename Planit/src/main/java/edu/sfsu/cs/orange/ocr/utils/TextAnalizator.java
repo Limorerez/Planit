@@ -38,6 +38,9 @@ public class TextAnalizator {
                 id = valOfSendSplit[1];
             }
         }
+        else{
+            isTypeFound = false;
+        }
 
         int iStart = isTypeFound ? 1 : 0;
         int iBodyCounter = 0;

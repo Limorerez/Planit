@@ -27,6 +27,7 @@ public class HandleResultActivity extends Activity {
         final EditText captureResult = (EditText) findViewById(R.id.captureValue);
         captureResult.setText(textAnalizator.getBodyAsString());
 
+        //final com.rey.material.widget.Spinner spnSendTo = (com.rey.material.widget.Spinner) findViewById(R.id.spn_sendto);
         final Spinner spnSendTo = (Spinner) findViewById(R.id.spn_sendto);
         ArrayAdapter<SendToEnum> adapter = new ArrayAdapter<SendToEnum>(this, android.R.layout.simple_spinner_item, SendToEnum.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -77,7 +78,6 @@ public class HandleResultActivity extends Activity {
 
             @Override
             public void onError(Object data) {
-<<<<<<< HEAD
                 try {
                     int v = 9;
 
@@ -85,14 +85,10 @@ public class HandleResultActivity extends Activity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-=======
->>>>>>> http call
-
             }
         });
     }
 
-<<<<<<< HEAD
     @Override
     protected void onResume() {
         super.onResume();
@@ -106,7 +102,6 @@ public class HandleResultActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-=======
     }
 
     private void createJiraItem(String [] SummaryData , String type, String cookie , String bliParent ) throws JSONException {
@@ -141,6 +136,5 @@ public class HandleResultActivity extends Activity {
 
                 break;
         }
->>>>>>> http call
     }
 }
