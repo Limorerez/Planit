@@ -2,8 +2,10 @@ package edu.sfsu.cs.orange.ocr;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -22,7 +24,9 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
 import edu.sfsu.cs.orange.ocr.utils.SendToEnum;
@@ -34,6 +38,8 @@ public class HandleResultActivity extends Activity {
     private int sendType = 0;
     private HashMap bliResult = new HashMap();
 
+    private TextAnalizator textAnalizator;
+    private EditText captureResult;
     private Spinner spnSendTo;
 
     @Override
@@ -41,11 +47,11 @@ public class HandleResultActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_handle_result);
         String capture = getIntent().getExtras().getString("capture");
-        final TextAnalizator textAnalizator = TextAnalizator.fromString(capture);
-        final EditText captureResult = (EditText) findViewById(R.id.captureValue);
+        textAnalizator = TextAnalizator.fromString(capture);
+        captureResult = (EditText) findViewById(R.id.captureValue);
         captureResult.setText(textAnalizator.getBodyAsString());
 
-        final Spinner spnSendTo = (Spinner) findViewById(R.id.spn_sendto);
+        spnSendTo = (Spinner) findViewById(R.id.spn_sendto);
         final ArrayAdapter<SendToEnum> adapter = new ArrayAdapter<SendToEnum>(this, android.R.layout.simple_spinner_item, SendToEnum.values());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnSendTo.setAdapter(adapter);
@@ -70,10 +76,10 @@ public class HandleResultActivity extends Activity {
             task_number_edt.setText(textAnalizator.getId());
         }
 
-        ImageButton jiraBtn = (ImageButton) findViewById(R.id.sendToJiraBtn);
+        /*ImageButton jiraBtn = (ImageButton) findViewById(R.id.sendToJiraBtn);
         jiraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void submitUpdateResult(View v) {
                 textAnalizator.setUpdatedBody(captureResult.getText().toString());
                 String selectedOption = spnSendTo.getSelectedItem().toString();
                 if (selectedOption.contains("JIRA")) {
@@ -96,7 +102,31 @@ public class HandleResultActivity extends Activity {
                     createMailItem(captureResult.getText());
                 }
             }
-        });
+        });*/
+    }
+
+    public void submitUpdateResult(View v) {
+        textAnalizator.setUpdatedBody(captureResult.getText().toString());
+        String selectedOption = spnSendTo.getSelectedItem().toString();
+        if (selectedOption.contains("JIRA")) {
+            try {
+                //      String type = "JIRA TASK";
+                // String [] SummaryData = {"sum11","sum22","sum33"};
+                // String [] SummaryData = {"sum1"};
+                // String bliParent = "";
+
+//                        String type = "TASK";
+                // String [] SummaryData = {"task1","task2","task3"};
+                // String bliParent = "104";
+
+                sendToJira(selectedOption, textAnalizator.getBody(), textAnalizator.getId());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (selectedOption.equals("Mail")) {
+            createMailItem(captureResult.getText());
+        }
     }
 
     private void sendToJira(final String type, final String[] SummaryData, final String bliParent) throws JSONException {
@@ -221,11 +251,7 @@ int x = 2;
         PackageManager pm = getPackageManager();
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setType("text/plain");
-        sendIntent.setPackage("com.google.android.gm");
-        sendIntent.putExtra(Intent.EXTRA_TEXT, sText);
-        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Email Subject");
-        startActivity(sendIntent);
-        /*List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
+        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
         List<Intent> intentList = new ArrayList<Intent>();
         for (int i = 0; i < resInfo.size(); i++) {
             // Extract the label, append it, and repackage it in a LabeledIntent
@@ -260,7 +286,7 @@ int x = 2;
         Intent[] extraIntents = intentList.toArray( new Intent[ intentList.size() ]);
 
         openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-        startActivity(openInChooser);*/
+        startActivity(openInChooser);
     }
 
     private void showSuccessDialog(String title, HashMap<String, String> jiraResults){

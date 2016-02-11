@@ -20,6 +20,8 @@ android {
 
 repositories {
     jcenter()
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -31,5 +33,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.15'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:appcompat-v7:+'
-    compile 'com.github.rey5137:material:1.2.2'
+    compile 'com.github.markushi:circlebutton:1.1'
 }
