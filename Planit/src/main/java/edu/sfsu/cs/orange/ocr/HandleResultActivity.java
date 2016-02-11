@@ -2,10 +2,8 @@ package edu.sfsu.cs.orange.ocr;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -17,15 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import edu.sfsu.cs.orange.ocr.network.ConnectionManager;
 import edu.sfsu.cs.orange.ocr.utils.SendToEnum;
@@ -54,8 +51,7 @@ public class HandleResultActivity extends Activity {
         spnSendTo.setAdapter(adapter);
         int pos = adapter.getPosition(textAnalizator.getSendTo());
         spnSendTo.setSelection(pos);
-        spnSendTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spnSendTo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 SendToEnum selVal = (SendToEnum) spnSendTo.getSelectedItem();
@@ -225,8 +221,11 @@ int x = 2;
         PackageManager pm = getPackageManager();
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setType("text/plain");
-
-        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
+        sendIntent.setPackage("com.google.android.gm");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, sText);
+        sendIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Email Subject");
+        startActivity(sendIntent);
+        /*List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
         List<Intent> intentList = new ArrayList<Intent>();
         for (int i = 0; i < resInfo.size(); i++) {
             // Extract the label, append it, and repackage it in a LabeledIntent
@@ -261,7 +260,7 @@ int x = 2;
         Intent[] extraIntents = intentList.toArray( new Intent[ intentList.size() ]);
 
         openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-        startActivity(openInChooser);
+        startActivity(openInChooser);*/
     }
 
     private void showSuccessDialog(String title, HashMap<String, String> jiraResults){
