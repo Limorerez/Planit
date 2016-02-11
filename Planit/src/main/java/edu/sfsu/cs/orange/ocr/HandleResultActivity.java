@@ -12,6 +12,9 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,6 +47,8 @@ public class HandleResultActivity extends Activity {
     private EditText captureResult;
     private Spinner spnSendTo;
     EditText task_number_edt;
+    HashMap<String, String> hmBLIs = new HashMap<String, String>();
+    Menu bliMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +82,15 @@ public class HandleResultActivity extends Activity {
         if (textAnalizator.getSendTo() == SendToEnum.JIRA_TASK){
             task_number_edt.setText(textAnalizator.getId());
         }
+
+        task_number_edt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                hmBLIs.clear();
+                getBLI();
+                return true;
+            }
+        });
 
         /*ImageButton jiraBtn = (ImageButton) findViewById(R.id.sendToJiraBtn);
         jiraBtn.setOnClickListener(new View.OnClickListener() {
@@ -188,8 +202,6 @@ public class HandleResultActivity extends Activity {
             ConnectionManager.getInstance(HandleResultActivity.this).getBLIfromProject(new ConnectionManager.ServerRequestListener() {
                 @Override
                 public void onSuccess(Object data) {
-                    //                JSONObject json = null;
-                    HashMap hm = new HashMap();
                     try {
                         JSONObject json = new JSONObject(data.toString());
 
@@ -204,11 +216,11 @@ public class HandleResultActivity extends Activity {
                             JSONObject issueTypeObject = fieldObj.getJSONObject("issuetype");
                             String type = issueTypeObject.getString("id");
                             if (type.equals("6")) {
-                                hm.put(key, summary);
+                                hmBLIs.put(key, summary);
                             }
                         }
-
-//hm is the result of BLI
+                        onPrepareOptionsMenu(bliMenu);
+                        //hm is the result of BLI
 
 
                     } catch (JSONException e) {
@@ -227,7 +239,6 @@ public class HandleResultActivity extends Activity {
     }
     private void createJiraItem(final String [] SummaryData , String type, final String cookie , final String bliParent ) throws JSONException {
         bliCounter = 0;
-     //   this.getBLI();
         switch (type) {
             case "JIRA BLI":
                 ConnectionManager.getInstance(HandleResultActivity.this).createBLI(cookie, SummaryData, new ConnectionManager.ServerRequestListener() {
@@ -367,6 +378,28 @@ public class HandleResultActivity extends Activity {
         d.show();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        /*HashMap<String, String> hash = new HashMap<String, String>();
+        hash.put("AAA", "BBB");
+        hash.put("CCC", "DDD");*/
+        int iKey = 0;
+        for (String key: hmBLIs.keySet() ) {
+            menu.add(Menu.NONE,  0, iKey, key);
+        }
+        return true;
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.bli_menu, menu);
+        bliMenu = menu;
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        task_number_edt.setText(item.getTitle());
+        return true;
+    }
 }
