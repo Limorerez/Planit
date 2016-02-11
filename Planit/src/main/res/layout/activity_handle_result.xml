@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="gone"
-                android:layout_weight="40">
+                android:layout_weight="60">
 
                 <TextView
                     android:id="@+id/lbl_taskId"
@@ -61,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:text="Id : "
-                    android:layout_marginLeft="10dp" />
+                    android:layout_marginLeft="2dp" />
                 <EditText
                     android:id="@+id/task_num"
                     android:layout_width="wrap_content"

@@ -42,6 +42,7 @@ public class HandleResultActivity extends Activity {
     private TextAnalizator textAnalizator;
     private EditText captureResult;
     private Spinner spnSendTo;
+    EditText task_number_edt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +72,8 @@ public class HandleResultActivity extends Activity {
                 // your code here
             }
         });
-
+        task_number_edt = (EditText)findViewById(R.id.task_num);
         if (textAnalizator.getSendTo() == SendToEnum.JIRA_TASK){
-            EditText task_number_edt = (EditText)findViewById(R.id.task_num);
             task_number_edt.setText(textAnalizator.getId());
         }
 
@@ -108,25 +108,31 @@ public class HandleResultActivity extends Activity {
 
     public void submitUpdateResult(View v) {
         textAnalizator.setUpdatedBody(captureResult.getText().toString());
-        String selectedOption = spnSendTo.getSelectedItem().toString();
-        if (selectedOption.contains("JIRA")) {
-            try {
-                //      String type = "JIRA TASK";
-                // String [] SummaryData = {"sum11","sum22","sum33"};
-                // String [] SummaryData = {"sum1"};
-                // String bliParent = "";
+        SendToEnum sendToType = (SendToEnum)spnSendTo.getSelectedItem();
+        if (sendToType == SendToEnum.JIRA_TASK){
+            textAnalizator.setId(task_number_edt.getText().toString());
+        }
+        switch (sendToType) {
+            case JIRA_TASK:
+            case JIRA_BLI:
+                    try {
+                        //      String type = "JIRA TASK";
+                        // String [] SummaryData = {"sum11","sum22","sum33"};
+                        // String [] SummaryData = {"sum1"};
+                        // String bliParent = "";
 
 //                        String type = "TASK";
-                // String [] SummaryData = {"task1","task2","task3"};
-                // String bliParent = "104";
+                        // String [] SummaryData = {"task1","task2","task3"};
+                        // String bliParent = "104";
 
-                sendToJira(selectedOption, textAnalizator.getBody(), textAnalizator.getId());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        if (selectedOption.equals("Mail")) {
-            createMailItem(captureResult.getText());
+                        sendToJira(sendToType.toString(), textAnalizator.getBody(), textAnalizator.getId());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+            case mail:
+                createMailItem(captureResult.getText());
+                break;
         }
 
     }

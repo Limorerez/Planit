@@ -67,6 +67,9 @@ public class TextAnalizator {
         return res;
     }
 
+    public void setId(String sId) {
+        id = sId;
+    }
     public String getId() {
         return id;
     }
