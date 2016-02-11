@@ -138,7 +138,8 @@ public class HandleResultActivity extends Activity {
         //   @Override
         // public void onSuccess(Object data) {
         try {
-            String cookie = "DAE930B38B6BB9B0E9D7CADDC5734034";
+            //String cookie = "DAE930B38B6BB9B0E9D7CADDC5734034";
+            String cookie =  "D65970D30760D44FE4371C08281FF659";
             createJiraItem(SummaryData, type, cookie, bliParent);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -262,8 +263,6 @@ int x = 2;
 
             Intent intent = new Intent(android.content.Intent.ACTION_SEND);
             intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
-            intent.setType("text/plain"); // put here your mime type
-            intent.putExtra(Intent.EXTRA_TEXT, sText);
 
             if (packageName.equals("com.whatsapp")) {
                 intent.setPackage(packageName);
@@ -278,6 +277,11 @@ int x = 2;
                 intentList.add(smsIntent);
             }
             else if (packageName.equals("com.google.android.gm")) {
+                sText.insert(0,"Hi,\n\nPlease review the MOM of today meeting.\n\n");
+                sText.append("\n\nBest regards,\nLimor Erez");
+                intent.setType("text/plain"); // put here your mime type
+                intent.putExtra(Intent.EXTRA_TEXT, sText);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "MOM of today meeting");
                 intent.setPackage(packageName);
                 intentList.add(intent);
             }
