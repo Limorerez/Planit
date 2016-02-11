@@ -150,6 +150,27 @@ public class ConnectionManager {
             }, false);
         }
     }
+    public void getBLIfromProject( final ServerRequestListener listener) throws JSONException {
+
+        String url = "https://sapjira.wdf.sap.corp/rest/api/2/search?jql=project='33636'";
+        JSONObject params = null;
+        ALSRequest req = new ALSRequest(Request.Method.GET, url,
+                params, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                listener.onSuccess(response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                listener.onError(error.toString());
+            }
+        }, false);
+
+    }
+
 
 
 

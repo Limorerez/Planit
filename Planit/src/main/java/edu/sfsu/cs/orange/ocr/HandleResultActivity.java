@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -181,9 +182,52 @@ public class HandleResultActivity extends Activity {
     public void onStop() {
         super.onStop();
     }
+    private void getBLI(){
 
+        try {
+            ConnectionManager.getInstance(HandleResultActivity.this).getBLIfromProject(new ConnectionManager.ServerRequestListener() {
+                @Override
+                public void onSuccess(Object data) {
+                    //                JSONObject json = null;
+                    HashMap hm = new HashMap();
+                    try {
+                        JSONObject json = new JSONObject(data.toString());
+
+                        JSONArray issuesArray = json.getJSONArray("issues");
+                        for (int i = 0; i < issuesArray.length(); i++) {
+
+                            JSONObject obj = issuesArray.getJSONObject(i);
+                            String key = obj.getString("key");
+                            JSONObject fieldObj = obj.getJSONObject("fields");
+
+                            String summary = fieldObj.getString("summary");
+                            JSONObject issueTypeObject = fieldObj.getJSONObject("issuetype");
+                            String type = issueTypeObject.getString("id");
+                            if (type.equals("6")) {
+                                hm.put(key, summary);
+                            }
+                        }
+
+//hm is the result of BLI
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onError(Object data) {
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     private void createJiraItem(final String [] SummaryData , String type, final String cookie , final String bliParent ) throws JSONException {
         bliCounter = 0;
+     //   this.getBLI();
         switch (type) {
             case "JIRA BLI":
                 ConnectionManager.getInstance(HandleResultActivity.this).createBLI(cookie, SummaryData, new ConnectionManager.ServerRequestListener() {
@@ -192,7 +236,8 @@ public class HandleResultActivity extends Activity {
                         try {
                             bliCounter++;
                             JSONObject json = new JSONObject(data.toString());
-                            bliResult.put(json.get("key"),json.get("self"));
+                            String SBliLink = "https://sapjira.wdf.sap.corp/browse/" + json.get("key");
+                            bliResult.put(json.get("key"),SBliLink);
                             if ( bliCounter == SummaryData.length){
                                 showSuccessDialog("Back Log items", bliResult);
                                 bliResult.clear();
@@ -207,7 +252,6 @@ public class HandleResultActivity extends Activity {
 
                     @Override
                     public void onError(Object data) {
-int x = 2;
                     }
                 });
                 break;
@@ -224,9 +268,10 @@ int x = 2;
                                     try {
                                         taskCounter++;
                                         JSONObject json = new JSONObject(data.toString());
-                                        bliResult.put(json.get("key"),json.get("self"));
+                                        String SBliLink = "https://sapjira.wdf.sap.corp/browse/" + json.get("key");
+                                        bliResult.put(json.get("key"),SBliLink);
                                         if ( taskCounter == SummaryData.length){
-                                            showSuccessDialog("Back Log items", bliResult);
+                                            showSuccessDialog("New Created Task ", bliResult);
                                             bliResult.clear();
                                             bliCounter = 0;
                                         }
@@ -321,4 +366,7 @@ int x = 2;
 
         d.show();
     }
+
+
+
 }
