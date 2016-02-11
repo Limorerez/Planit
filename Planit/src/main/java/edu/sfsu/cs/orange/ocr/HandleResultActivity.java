@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -127,6 +128,7 @@ public class HandleResultActivity extends Activity {
         if (selectedOption.equals("Mail")) {
             createMailItem(captureResult.getText());
         }
+
     }
 
     private void sendToJira(final String type, final String[] SummaryData, final String bliParent) throws JSONException {
@@ -291,23 +293,22 @@ int x = 2;
 
     private void showSuccessDialog(String title, HashMap<String, String> jiraResults){
         final TextView messageCtrl = new TextView(this);
-        String message = "";
+        String resMessage = "";
         for (String key: jiraResults.keySet()) {
-            message += key + " : " + jiraResults.get(key) + "\n\n";
+            SpannableString s = new SpannableString(jiraResults.get(key));
+            resMessage += key + " : " +  s + "\n\n";
         }
-        final SpannableString s = new SpannableString(message);
-        Linkify.addLinks(s, Linkify.ALL);
 
+        messageCtrl.setText(resMessage);
+        messageCtrl.setAutoLinkMask(RESULT_OK);
+        messageCtrl.setMovementMethod(LinkMovementMethod.getInstance());
         final AlertDialog d = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(R.drawable.planitlogo2)
-                .setMessage( s )
+                .setView(messageCtrl)
                 .create();
 
         d.show();
-        messageCtrl.setMovementMethod(LinkMovementMethod.getInstance());
     }
-
-
 }
