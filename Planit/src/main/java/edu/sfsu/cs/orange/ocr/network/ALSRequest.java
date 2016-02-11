@@ -199,7 +199,7 @@ public class ALSRequest extends Request<String>  {
                 || headers.equals(Collections.emptyMap())) {
             headers = new HashMap<String, String>();
         }
-        headers.put("cookie","JSESSIONID=DAE930B38B6BB9B0E9D7CADDC5734034");
+        headers.put("cookie","JSESSIONID=12670B28FDD1ACFBBD58D257165EB7B6");
  //        PrizeForLifeApplication.get().addSessionCookie(headers);
 
         return headers;
